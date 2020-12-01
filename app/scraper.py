@@ -30,10 +30,9 @@ class TimeSeries:
     def getData(self):
         no_of_points = 500  # MAX IS 500
 
-        url = 'https://stockx.com/api/products/' + str(self.id[0]) + '/chart?start_date=all&end_date=2020-07-15' \
-            '&intervals=' + str(no_of_points) + '&format=highstock&currency=GBP&country=GB '
+        url = f'https://stockx.com/api/products/{str(self.id[0])}/chart?start_date=all&end_date=2020-07-15&intervals={str(no_of_points)}&format=highstock&currency=GBP&country=GB '
         outputs = json.loads(requests.get(url, headers=self.headers).text)
-
+        print(outputs)
         for i in outputs['series']:
             self.list = i['data']
 

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sneaker Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+</head>
+<body>
+<br>
+    <section class="banner" >
+        <div class="container has-text-centered">
+            <h1 class="title">The Sneaker Analysis Tool</h1>
+            <h2 class="subtitle">Yasser Qureshi</h2>
+        </div>
+    </section>
+    <br><br>
+    <section class="main">
+        <div class="container has-text-centered">
+            <h1 class="title"></h1>
+            <input type="text" class="input" placeholder="Type the sneaker name here..." name="sneaker" >
+            <input type="button" class="button" value="Submit">
+        </div>
+    </section>
+
+    <section class="shoe selection">
+        <div class="selections">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </section>
+</body>
+</html>
