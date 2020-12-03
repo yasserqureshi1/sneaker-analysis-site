@@ -1,4 +1,12 @@
 {% extends "home.html" %}
 
 {% block content %}
-<div class=""
+<div class="">
+    <h1 class="header">Results</h1>
+    {% for item in results %}
+    <a href={{item[1]}} >
+        <h1>{{item[0]}}</h1>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}
