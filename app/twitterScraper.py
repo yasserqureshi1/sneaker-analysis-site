@@ -1,12 +1,15 @@
 # Need to fix and clean up
 # - Last 100 Tweets
 # - return text and sentiment
+# - Still need to fix NLP -> does not recognise 'fire' are positive
 
 import tweepy
 from textblob import TextBlob
 import re
 import config
 import string
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
 
 auth = tweepy.OAuthHandler(config.api_key, config.api_secret_key)
 auth.set_access_token(config.access_token, config.access_secret_token)
@@ -17,7 +20,8 @@ api = tweepy.API(auth)
 class MyStreamListener(tweepy.StreamListener):
     def on_status(self, status):
         """
-        Returns the full text of a searched tweet via the Twitter Streamer
+        Returns the full text of a searched tweet via the Twitter Streamer including tweet author, handle,
+        date/time of the tweet
         """
         if hasattr(status, "retweeted_status"):
             try:
@@ -31,22 +35,16 @@ class MyStreamListener(tweepy.StreamListener):
             except AttributeError:
                 text = status.text
 
-        self.get_details(status)
+        message = preprocess_tweet(text)
+        sentiment_analysis(message)
 
-        return text
-
-    def get_details(self, status):
-        """
-        Returns the tweet author, handle, date/time of the tweet (for display purposes)
-        """
-        return status.user.name, status.user.screen_name, status.user.location, status.created_at
+        return text, status.user.name, status.user.screen_name, status.user.location, status.created_at
 
 
 def preprocess_tweet(tweet):
     """
     Prepares the text in a tweet for sentiment analysis. Returns tokenized and cleaned words
     """
-
     # Remove Links
     text = re.sub(r'http\S+', '', tweet)
 
@@ -63,6 +61,10 @@ def preprocess_tweet(tweet):
     text = "".join([char for char in text if char not in string.punctuation])
     text = re.sub("[0-9]+", '', text)
 
+    # Remove new lines
+    text = text.replace('\n', ' ')
+
+    print('\n', text)
     return text
 
 
@@ -70,19 +72,28 @@ def sentiment_analysis(tweet):
     """
     Returns sentiment analysis data on text
     """
-    analysis = TextBlob(tweet)
-    print(analysis.sentiment[0])
-    return analysis.sentiment[0]
+    # Need to gather tweets and rank them. Create a classifier
+    sid = SentimentIntensityAnalyzer()
+    ss = sid.polarity_scores(tweet)
+    for k in sorted(ss):
+        print('{0}: {1}, '.format(k, ss[k]), end='')
+    return
 
 
 def last_100_tweets(search):
     """
     Returns last 100 tweets on searched item
     """
-    return api.search(search, count=100, lang='en')
+    tweets = api.search(search, count=100, lang='en', tweet_mode='extended')
+    for tweet in tweets:
+        tweet_pre = preprocess_tweet(tweet.full_text)
+        sentiment_analysis(tweet_pre)
+    return
 
 
 if __name__ == '__main__':
-    myStreamListener = MyStreamListener()
-    myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
-    stream = myStream.filter(track=['nike'], languages=["en"])
+    #myStreamListener = MyStreamListener()
+    #myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
+    #stream = myStream.filter(track=['nike'], languages=["en"])
+
+    last_100_tweets('nike')

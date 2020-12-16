@@ -11,6 +11,9 @@ params = {'x-algolia-agent': 'Algolia for vanilla JavaScript 3.22.1',
 
 
 def findItem(item):
+    '''
+    Returns the name and product ids of a searched sneaker
+    '''
     data = {"params": "query={}&hitsPerPage=20&facets=*".format(item)}
 
     response = requests.post(url='https://xw7sbct9v6-dsn.algolia.net/1/indexes/products/query', headers=headers,  params=params, json=data)
@@ -25,6 +28,9 @@ def findItem(item):
 
 
 def getProductDetails(item):
+    '''
+    Returns the title and image url of a sneaker
+    '''
     url = f'https://stockx.com/api/products/{item}'
     response = requests.get(url=url, headers=headers)
     output = json.loads(response.text)
@@ -37,10 +43,24 @@ def getProductDetails(item):
 
 
 def getDatapoints(item_id):
+    '''
+    Returns the 500 datapoints corresponding to previous historical prices
+    '''
     no_of_points = 500  # MAX IS 500
     url = f'https://stockx.com/api/products/{item_id}/chart?start_date=all&end_date=2020-07-15&intervals={str(no_of_points)}&format=highstock&currency=GBP&country=GB'
     outputs = json.loads(requests.get(url=url, headers=headers).text)
     return outputs['series']['data']
+
+def getRelated(item_id):
+    '''
+    Returns related sneakers
+    '''
+    url = f'https://stockx.com/api/products/{item_id}/related?currency=GBP&limit=15&country=GB'
+    response = requests.get(url=url, headers=headers) # Returns all details on 15 related shoes
+    print(response.text)
+
+def getFeatures(item_id):
+    pass
 
 
 def epoch2human(self, epoch):
@@ -66,3 +86,6 @@ def main(self):
     x, y = self.conversion(self.list)
     self.plot(x, y)
 
+if __name__ == "__main__":
+    item = findItem('Yeezy Zebra')
+    getRelated(item[0][1])
