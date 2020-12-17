@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Sneaker Analysis Tool</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='shoe.css') }}">
+</head>
+<body>
+    <div class="header">{% include "banner.html" %}</div>
+
+    <div class="middle" style="scroll-behavior:smooth;">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
