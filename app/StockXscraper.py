@@ -21,8 +21,6 @@ def findItem(item):
 
     hits = []
     for i in output['hits']:
-        print(i['name'])
-        print(i['objectID'], '\n')
         hits.append([i['name'], i['objectID']])
     return hits
 
@@ -34,12 +32,16 @@ def getProductDetails(item):
     url = f'https://stockx.com/api/products/{item}'
     response = requests.get(url=url, headers=headers)
     output = json.loads(response.text)
-    title = output['Product']['title']
+    data = {'title': output['Product']['title']}
     try:
-        image_url = output['Product']['media']['360'][0]
+        data['image_url'] = output['Product']['media']['360'][0]
     except:
-        image_url = output['Product']['media']['imageUrl']
-    return [title, image_url]
+        data['image_url'] = output['Product']['media']['imageUrl']
+    data['colourway'] = output['Product']['colorway']
+    data['brand'] = output['Product']['brand']
+    data['release_date'] = output['Product']['releaseDate']
+    data['retail_price'] = output['Product']['retailPrice']
+    return data
 
 
 def getDatapoints(item_id):
