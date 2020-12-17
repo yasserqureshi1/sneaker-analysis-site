@@ -1,11 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{data[0]}}</title>
-</head>
-<body>
-    <h1 class="title" >{{data[0]}}</h1>
-    <img src={{data[1]}}>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<section>
+    <div class="shoe-details">
+        <h4 class="subtitle" style="text-align:center;">{{data['title']}}</h4>
+        <img src={{data['image_url']}} width="200" style="display:block;margin-left:auto;margin-right:auto;">
+        <br>
+        <div class="shoe-titles-details">
+            <p>Brand</p>
+            <p>Colourway</p>
+            <p>Release Date</p>
+            <p>Retail Price</p>
+        </div>
+
+        <div class="shoe-values-details">
+            <p> {{data['brand']}}</p>
+            <p> {{data['colourway']}}</p>
+            <p> {{data['release_date']}}</p>
+            <p> {{data['retail_price']}}</p>
+        </div>
+
+        <br>
+
+    </div>
+
+    <div class="shoe-stats">
+        <h4>Shoe Stats</h4>
+        <div>
+            <!-- Insert JavaScript Chart.js code here -->
+        </div>
+    </div>
+</section>
+{% endblock %}
