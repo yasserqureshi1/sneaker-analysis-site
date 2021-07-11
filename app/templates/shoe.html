@@ -1,34 +1,99 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section>
-    <div class="shoe-details">
-        <h4 class="subtitle" style="text-align:center;">{{data['title']}}</h4>
-        <img src={{data['image_url']}} width="200" style="display:block;margin-left:auto;margin-right:auto;">
-        <br>
-        <div class="shoe-titles-details">
-            <p>Brand</p>
-            <p>Colourway</p>
-            <p>Release Date</p>
-            <p>Retail Price</p>
-        </div>
 
-        <div class="shoe-values-details">
-            <p> {{data['brand']}}</p>
-            <p> {{data['colourway']}}</p>
-            <p> {{data['release_date']}}</p>
-            <p> {{data['retail_price']}}</p>
-        </div>
+<!-- Top-->
+<div>
+    <h4 class="subtitle" style="text-align:center;">{{data['title']}}</h4>
+    <img src="{{data['image_url'] }}" width="300" style="display:block;margin-left:auto;margin-right:auto;">
+</div>
 
-        <br>
-
+<!-- Shoe Description -->
+<div class="row">
+    <div class="col-6" style="text-align: center;">
+        <p>Brand</p>
+        <p>Colourway</p>
+        <p>Release Date</p>
+        <p>Retail Price</p>
     </div>
 
-    <div class="shoe-stats">
-        <h4>Shoe Stats</h4>
-        <div>
-            <!-- Insert JavaScript Chart.js code here -->
+    <div class="col-6" style="text-align: center;">
+        <p> {{data['brand']}}</p>
+        <p> {{data['colourway']}}</p>
+        <p> {{data['release_date']}}</p>
+        <p> {{data['retail_price']}}</p>
+    </div>
+</div>
+    
+<!-- Shoe historical prices-->
+<div>
+    <h4 style="text-align: center;">Shoe Stats</h4>
+    <div style="width: 700px; padding-left: 0; padding-right: 0;margin-left: auto; margin-right: auto; display: block;">
+        <canvas id="myChart" style="text-align: center;"></canvas>
+        {% block javascript %}
+        <script>
+            labels = JSON.parse({{ labels | tojson }})
+            values = JSON.parse({{ values | tojson }})
+
+            data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Average Price over Time',
+                    data: values,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            };
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: data
+            });
+        </script>
+        {% endblock %}
+    </div>
+</div>
+
+
+<!-- Shoe Tweets -->
+<div style="height: 500px;position:relative;">
+    <div style="max-height:100%;overflow:auto;border:1px solid black;padding:12px">
+        {% for tweet in tweets %}
+        <div class="card rounded" style="padding-left: 5px;padding-right: 5px; padding-top: 6px; padding-bottom: 6pxŸ;">
+            <h6 class="card-title" style="font-size: 10pt;">{{ tweet.user.screen_name }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted" style="font-size: 8pt;">{{ tweet.created_at }}</h6>
+            <p class="card-text" style="font-size: 10pt;">{{ tweet.full_text }}</p>
+        </div>
+        {% endfor %} 
+    </div>
+</div>
+
+
+<!-- Shoe marketplace prices -->
+<div class="container-fluid">
+    <div class="row">
+         <!-- eBay -->
+        <div class="col-6">
+            <div class="card">
+                <h6 class="card-title">eBay Stats</h6>
+                <p class="card-text">
+                    
+                </p>
+            </div>
+        </div>
+
+        <!-- Depop -->
+        <div class="col-6">
+            <div class="card">
+                <h6 class="card-title">Depop Stats</h6>
+                <p class="card-text">
+                    
+                </p>
+            </div>
         </div>
     </div>
-</section>
+</div>
+
 {% endblock %}
