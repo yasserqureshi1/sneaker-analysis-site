@@ -2,4 +2,6 @@
 /venv/
 .idea
 config.py
-notes.txt
+app/__pycache__
+.DS_STORE
+__pycache__
