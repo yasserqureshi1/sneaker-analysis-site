@@ -1,8 +1,9 @@
 # Sneaker Analysis Tool
-**A webpage that uses machine learning to predict the resell price of sneakers**
+
+Site is deployed on Heroku at the following address: [https://sneaker-analysis.herokuapp.com](https://sneaker-analysis.herokuapp.com)
 
 ## About this Project
-
+This site was produced with the sneakerhead in mind. Information on any sneaker can be found on this site including a timeseries of resell prices, the prices on different marketplaces and posts from Twitter. 
 
 ## Contents
  - [Installation](#installation)
@@ -11,13 +12,8 @@
  - [Contact](#contact)
 
 ## Installation
-
-
-## Issues
-
-
-## License
-
-
-## Contact
+Install the dependencies using the command:
+```
+pip install -r requirements.txt
+```
 
