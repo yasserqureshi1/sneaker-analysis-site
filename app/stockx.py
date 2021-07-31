@@ -3,12 +3,18 @@ import requests
 from datetime import datetime
 
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15",
-    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "accept-encoding": "gzip, deflate, br",
-    "accept-language": "en-gb",
-    "content-type": "application/json; charset=utf-8"
+headers= {
+    "accept": "application/json",
+    "accept-encoding": "gzip, deflate",
+    "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+    "origin": "https://www.apirequest.io",
+    "referer": "https://www.apirequest.io/",
+    "sec-ch-ua": '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
 }
 
 
@@ -16,11 +22,9 @@ def find_item(item):
     '''
     Returns the name and product ids of a searched sneaker
     '''
-    headers = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0"}
-
     params = {
         'x-algolia-agent': 'Algolia for JavaScript (4.9.1); Browser',
-        'x-algolia-api-key': 'OWM2ZDFkN2E0YjlkNzZmYmZkYTRiMTAyYzBhMTU4ZTI1NDI2Zjg5OWM3NDU0YzhiZDIyZmMyYmQ3NDk5NmNiOXZhbGlkVW50aWw9MTYyNTM1MTQ0Nw==',
+        'x-algolia-api-key': 'ZDUyZTFlNjBjNTMxZjM2YTZhZjcxYTkxNzY1Y2FkMzgxYmIwNzZjMjJiYmEzNGZhNTlkMWE4NDYyNzM0ZjcwY3ZhbGlkVW50aWw9MTYyNzkwNjk5Mw==',
         'x-algolia-application-id': 'XW7SBCT9V6'
     }
 
@@ -31,7 +35,11 @@ def find_item(item):
 
     hits = []
     for i in output['hits']:
-        hits.append([i['name'], i['objectID']])
+        hits.append({
+            'name': i['name'], 
+            'sku': i['objectID'],
+            'picture_url': i['thumbnail_url']
+            })
     return hits
 
 
@@ -39,7 +47,6 @@ def get_product_details(item):
     '''
     Returns the title and image url of a sneaker
     '''
-    #headers = {'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"}
     url = f'https://stockx.com/api/products/{item}'
     response = requests.get(url=url, headers=headers)
     output = json.loads(response.text)
@@ -59,8 +66,6 @@ def get_datapoints(item_id):
     '''
     Returns the 500 datapoints corresponding to previous historical prices
     '''
-    headers = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0"}
-
     no_of_points = 500  # MAX IS 500
     current_date = datetime.date(datetime.now())
     url = f'https://stockx.com/api/products/{item_id}/chart?start_date=all&end_date={current_date.year}-{current_date.month}-{current_date.day}&intervals={str(no_of_points)}&format=highstock&currency=GBP&country=GB'
@@ -77,8 +82,17 @@ def get_related(item_id):
     print(response.text)
 
 
+def get_prices(item_id):
+    '''
+    Returns StockX market
+    '''
+    url = f'https://stockx.com/api/products/{item_id}/market?currency=GBP&country=GB'
+    response = requests.get(url=url, headers=headers)
+    output = json.loads(response.text)
+    return output['Market']
+
+
 
 # Use for testing purposes
 if __name__ == '__main__':
-    item = find_item('yeezy')
-    print(item)
+    print(get_prices('117a507b-f50a-493b-9ce2-b71b42ccad06'))
