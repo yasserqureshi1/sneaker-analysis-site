@@ -10,6 +10,19 @@ params = {'x-algolia-agent': 'Algolia for JavaScript (3.35.1); Browser',
 url = 'https://2fwotdvm2o-dsn.algolia.net/1/indexes/product_variants_v2_trending_purchase/query'
 
 
+def find_item(item):
+    data = {"params": "query={}&distinct=true&facetFilters=(product_category%3Ashoes)&page=0&hitsPerPage=20&clickAnalytics=true".format(item.replace(' ', '%20'))}
+    html = requests.post(url=url, headers=headers, params=params, json=data)
+    output = json.loads(html.text)
+    shoes = []
+    for shoe in output['hits']:
+        shoes.append({
+            "name": shoe['name'],
+            "sku": shoe['sku'],
+            "picture_url": shoe['original_picture_url']
+        })
+    return shoes
+
 
 def get_shoe_details(item):
     '''Indexes into the JSON object returned by the scrape_site() function to return a dictionary with specific data'''
@@ -20,6 +33,7 @@ def get_shoe_details(item):
         data = {
             'name': output['hits'][0].get('name'),
             'sku': output['hits'][0].get('sku'),
+            'picture_url': output['hits'][0].get('original_picture_url'),
             'colour': output['hits'][0].get('color'),
             'details': output['hits'][0]['details'],
             'release_date': output['hits'][0]['release_date'],
@@ -60,4 +74,9 @@ def get_shoe_details(item):
 
 # Use for testing purposes
 if __name__ == '__main__':
-    print(get_shoe_details('yeezy'))
+    find_item('yeezy')
+    #print(get_shoe_details('FU9013'))
+
+    #shoes = find_item('yeezy')
+    #for shoe in shoes:
+    #    print(shoe)
