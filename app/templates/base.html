@@ -4,7 +4,7 @@
   		<title>Sneaker Analysis</title>
     	<meta charset="utf-8">
     	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+		<link rel="icon" href="{{ url_for('static', filename='assets/favicon.ico')}}" type="image/x-icon"/>
     	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 		
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -16,7 +16,7 @@
   	<body>
 
       	<div class="wrapper d-flex align-items-stretch">
-			<nav id="sidebar" class="active">
+			<nav id="sidebar" class="inactive">
 				<div class="custom-menu">
 					<button type="button" id="sidebarCollapse" class="btn btn-primary">
 	          			<i class="fa fa-bars"></i>
@@ -33,7 +33,7 @@
 						<div class="subscribe-form">
 							<div class="form-group d-flex">
 								<div class="icon"><span class="icon-paper-plane"></span></div>
-								<form method="POST" id="search">
+								<form method="POST" id="search" action="{{ url_for('view.search') }}">
 									<input type="text" name="search" class="form-control" placeholder="Search">
 								</form>
 							</div>
@@ -48,28 +48,19 @@
 							<a href="/about"><span class="fa fa-user mr-3"></span> About</a>
 						</li>
 						<li>
-							<a href="/brands"><span class="fa fa-briefcase mr-3"></span> Brands</a>
-						</li>
-						<li>
 							<a href="/contact"><span class="fa fa-paper-plane mr-3"></span> Contact</a>
 						</li>
 					</ul>
 
-	        		
-
 	        		<div class="footer">
-	        			<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
-						  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+	        			<p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | By Yasser</p>
 	        		</div>
-
 	      		</div>
     		</nav>
 
 				<!-- Page Content  -->
 			<div id="content" class="p-4 p-md-5 pt-5">
 				{% block content %}
-
 				{% endblock %}
 			</div>
 		</div>
