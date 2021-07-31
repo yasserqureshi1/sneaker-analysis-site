@@ -1,20 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h2 class="mb-4">Home</h2>
-
-<p>
-    Welcome to the Sneaker Analysis Tool. 
-    Here you will be able to find information on a variety of sneakers to help you with your purchasing decisions.
-</p>
-<p>
-    Features on this site include:
-</p>
-<ul>
-    <li>Historical prices</li>
-    <li>Twitter feed</li>
-    <li>Sentiment analysis of shoe</li>
-</ul>
+<div style="position: relative;height: 70vh;">
+    <div style="margin: 0;position: absolute;top: 50%;left: 50%;-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);">
+        <h1 class="mb-1" style="text-align: center;">Search for a Sneaker...</h1>
+        <form method="POST" id="search" action="{{ url_for('view.search') }}">
+            <input type="text" name="search" class="form-control" placeholder="Search" style="text-align:center;">
+        </form>
+    </div>
+</div>
 
 {% endblock %}
